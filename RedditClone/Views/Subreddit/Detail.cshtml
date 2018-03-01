@@ -1,0 +1,79 @@
+﻿@using RedditClone
+@using RedditClone.Models
+@model RedditClone.Models.SubredditViewModel
+
+@{
+    ViewBag.Title = "RedditClone - " + Model.SubredditName;
+    var comments = new List<Comment>();
+    using (var redditCloneContext = new RedditCloneContext())
+    {
+        comments = redditCloneContext.Comments.ToList();
+    }
+}
+
+<div class="jumbotron">
+    <h1>
+        @Model.SubredditName
+    </h1>
+    <hr class="my-4">
+    <div class="btn-toolbar d-flex justify-content-between">
+        @Html.ActionLink("Add Post", "PostAdd", "Post", new { id = Model.SubredditId }, new { @class = "btn btn-primary btn-sm" })
+        <button type="button" data-toggle="modal" data-target="#deleteSubredditModal" class="btn btn-danger btn-sm">Delete Subreddit</button>
+    </div>
+    <div class="modal fade" id="deleteSubredditModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                @using (Html.BeginForm("DeleteSubreddit", "Subreddit"))
+                {
+                    <input type="hidden" value="@Model.SubredditId" name="SubredditId" />
+                    <div class="modal-header">
+                        <h4 class="modal-title">Delete Subreddit</h4>
+                        <button type="button" class="close ml-0" data-dismiss="modal" aria-label="Close">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        Are you sure you want to delete @Model.SubredditName?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-danger btn-sm">Yes</button>
+                        <button type="button" class="btn btn-light btn-sm" data-dismiss="modal">Cancel</button>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="list-group">
+    @foreach (var post in Model.Posts.OrderByDescending(p => p.Date))
+    {
+        int commentCount = 0;
+        foreach (var comment in comments)
+        {
+            if (comment.PostId == post.PostId)
+            {
+                commentCount++;
+            }
+        }
+
+        <a href="@Url.Action("Detail", "Post", new {id = post.PostId})"
+           class="list-group-item list-group-item-action">
+            <h4 class="d-inline-block mb-4">@post.Title</h4>
+            @if (post.Body != null)
+            {
+                <p>@(post.Body.Length > 75 ? post.Body.Substring(0, 75) + "..." : post.Body)</p>
+
+            }
+            <div class="d-flex justify-content-between">
+                <span class="badge badge-primary d-flex flex-column justify-content-around">
+                    <span>Comments <span class="badge badge-light badge-pill">@commentCount</span></span>
+                </span>
+
+                @{
+                    var age = DateTime.Now.Subtract(post.Date);
+                }
+
+                <span class="font-italic">@(age.TotalHours > 1 ? post.Date.ToString("M") + " " + post.Date.ToString("t") : "New!")</span>
+            </div>
+        </a>
+                    }
+</div>

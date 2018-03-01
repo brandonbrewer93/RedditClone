@@ -1,0 +1,109 @@
+﻿@model RedditClone.Models.PostViewModel
+
+@{
+    ViewBag.Title = "RedditClone - " + Model.Title;
+}
+
+<div class="jumbotron">
+    <h2>@Model.Title</h2>
+    <span class="d-block text-right font-italic">@Model.Date</span>
+    @if (Model.ImageLink != null)
+    {   //Inline-styling will be removed when custom CSS is added
+        <img src="@Model.ImageLink" alt="Post image." class="img-fluid rounded d-block w-100 mx-auto mt-5 mb-5" style="max-width: 800px" />
+    }
+    <p class="mt-5">@Model.Body</p>
+    <div class="btn-toolbar d-flex justify-content-between" role="toolbar">
+        <div class="btn-group" role="group">
+            <button type="button" data-toggle="modal" data-target="#addCommentModal" class="btn btn-primary btn-sm">Comment</button>
+        </div>
+        <div class="btn-group" role="group">
+            @Html.ActionLink("Edit", "PostEdit", new { id = Model.PostId }, new { @class = "btn btn-secondary btn-sm" })
+            <button type="button" data-toggle="modal" data-target="#deletePostModal" class="btn btn-danger btn-sm">Delete</button>
+        </div>
+    </div>
+    <div class="modal fade" id="deletePostModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                @using (Html.BeginForm("DeletePost", "Post"))
+                {
+                    <input type="hidden" value="@Model.PostId" name="PostId" />
+                    <input type="hidden" value="@Model.SubredditId" name="SubredditId" />
+                    <div class="modal-header">
+                        <h4 class="modal-title">Delete Post</h4>
+                        <button type="button" class="close ml-0" data-dismiss="modal" aria-label="Close">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        Are you sure you want to delete @Model.Title?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-danger btn-sm">Yes</button>
+                        <button type="button" class="btn btn-light btn-sm" data-dismiss="modal">Cancel</button>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="addCommentModal" tabindex="-1" role="dialog" aria-labelledby="addModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                @using (Html.BeginForm("AddComment", "Comment"))
+                {
+                    <input id="CommentId" name="CommentId" type="hidden" />
+                    <input id="PostId" name="PostId" type="hidden" value="@Model.PostId" />
+                    <div class="modal-header">
+                        <h4 class="modal-title">New Comment</h4>
+                        <button type="button" class="close ml-0" data-dismiss="modal" aria-label="Close">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="CommentBody">Comment</label>
+                            <textarea class="form-control" id="CommentBody" name="CommentBody" rows="10"></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary btn-sm">Add Comment</button>
+                        <button type="button" class="btn btn-light btn-sm" data-dismiss="modal">Cancel</button>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="list-group">
+    @foreach (var comment in Model.Comments)
+    {
+        <div class="list-group-item">
+            <h6 class="d-inline-block mb-5">@comment.CommentBody</h6>
+            <div class="d-flex justify-content-between">
+                <button type="button" data-toggle="modal" data-target="#comment-@comment.CommentId" class="btn btn-secondary btn-sm text-left">Edit</button>
+                <span class="font-italic">@comment.Date</span>
+            </div>
+        </div>
+        <div class="modal fade" id="comment-@comment.CommentId" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    @using (Html.BeginForm("EditComment", "Comment"))
+                    {
+                        <input type="hidden" id="CommentId" name="CommentId" value="@comment.CommentId" />
+                        <input type="hidden" id="PostId" name="PostId" value="@comment.PostId" />
+                        <div class="modal-header">
+                            <h4 class="modal-title">Edit Comment</h4>
+                            <button type="button" class="close ml-0" data-dismiss="modal" aria-label="Close">&times;</button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label for="CommentBody">Comment</label>
+                                <textarea class="form-control" id="CommentBody" name="CommentBody" rows="15">@comment.CommentBody</textarea>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary btn-sm">Save</button>
+                            <button type="button" class="btn btn-light btn-sm" data-dismiss="modal">Cancel</button>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    }
+</div>

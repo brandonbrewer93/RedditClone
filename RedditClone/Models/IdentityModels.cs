@@ -18,16 +18,20 @@ namespace RedditClone.Models
         }
     }
 
-    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
+    public class RedditCloneContext : IdentityDbContext<ApplicationUser>
     {
-        public ApplicationDbContext()
-            : base("DefaultConnection", throwIfV1Schema: false)
+        public RedditCloneContext()
+            : base("RedditClone", throwIfV1Schema: false)
         {
         }
 
-        public static ApplicationDbContext Create()
+        public static RedditCloneContext Create()
         {
-            return new ApplicationDbContext();
+            return new RedditCloneContext();
         }
+
+        public virtual DbSet<Subreddit> Subreddits { get; set; }
+        public virtual DbSet<Post> Posts { get; set; }
+        public virtual DbSet<Comment> Comments { get; set; }
     }
 }

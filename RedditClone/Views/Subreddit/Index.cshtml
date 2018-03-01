@@ -1,0 +1,57 @@
+﻿@using RedditClone.Models
+@model RedditClone.Models.SubredditListViewModel
+
+@{
+    ViewBag.Title = "RedditClone - All";
+}
+
+<div class="col-lg-10 mx-auto">
+    <div class="jumbotron">
+        <div class="container">
+            <h1 class="display-4">RedditClone</h1>
+            <p>A community for discussing all of your favorite things.</p>
+            <hr class="my-4">
+            <p>If we dont have a subreddit that interests you, create a new one!</p>
+            <p class="lead">
+                <button type="button" data-toggle="modal" data-target="#addSubredditModal" class="btn btn-primary btn-sm">Add Subreddit</button>
+                <div class="modal fade" id="addSubredditModal" tabindex="-1" role="dialog" aria-labelledby="addModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            @using (Html.BeginForm("AddSubreddit", "Subreddit"))
+                            {
+                                <input id="SubredditId" name="SubredditId" type="hidden" />
+                                <div class="modal-header">
+                                    <h4 class="modal-title">Add Subreddit</h4>
+                                    <button type="button" class="close ml-0" data-dismiss="modal" aria-label="Close">&times;</button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="form-group">
+                                        <label for="SubredditName">Name</label>
+                                        <input class="form-control" id="SubredditName" name="SubredditName" type="text" />
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="submit" class="btn btn-primary btn-sm">Add</button>
+                                    <button type="button" class="btn btn-light btn-sm" data-dismiss="modal">Cancel</button>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </p>
+        </div>
+    </div>
+
+    <div class="list-group">
+        @for (var i = 0; i < Model.Subreddits.Count; i++)
+        {
+            <a href="@Url.Action("Detail", new { id = Model.Subreddits[i].SubredditId })"
+               class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                <h4>@Model.Subreddits[i].SubredditName</h4>
+                <span class="badge badge-primary d-flex flex-column justify-content-around">
+                    <span>Posts <span class="badge badge-light badge-pill">@Model.Subreddits[i].Posts.Count</span></span>
+                </span>
+            </a>
+        }
+    </div>
+</div>
