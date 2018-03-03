@@ -48,6 +48,7 @@ namespace RedditClone.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public ActionResult AddPost(PostViewModel postViewModel)
         {
             using (var redditCloneContext = new RedditCloneContext())
@@ -92,6 +93,7 @@ namespace RedditClone.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public ActionResult EditPost(PostViewModel postViewModel)
         {
             using (var redditCloneContext = new RedditCloneContext())
@@ -113,6 +115,7 @@ namespace RedditClone.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public ActionResult DeletePost(PostViewModel postViewModel)
         {
             int subredditId = postViewModel.SubredditId;

@@ -51,8 +51,10 @@ namespace RedditClone.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public ActionResult AddSubreddit(SubredditViewModel subredditViewModel)
         {
+            
             using (var redditCloneContext = new RedditCloneContext())
             {
                 var subreddit = new Subreddit
@@ -68,6 +70,7 @@ namespace RedditClone.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public ActionResult DeleteSubreddit(SubredditViewModel subredditViewModel)
         {
             using (var redditCloneContext = new RedditCloneContext())

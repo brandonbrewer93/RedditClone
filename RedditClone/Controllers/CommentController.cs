@@ -12,6 +12,7 @@ namespace RedditClone.Controllers
     {
         // GET: Comment
         [HttpPost]
+        [Authorize]
         public ActionResult AddComment(Comment newComment)
         {
             var postId = newComment.PostId;
@@ -33,6 +34,7 @@ namespace RedditClone.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public ActionResult EditComment(Comment currentComment)
         {
             using (var redditCloneContext = new RedditCloneContext())
