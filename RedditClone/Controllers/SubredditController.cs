@@ -6,6 +6,7 @@ using System.EnterpriseServices;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Microsoft.AspNet.Identity;
 using RedditClone.Models;
 
 namespace RedditClone.Controllers
@@ -38,6 +39,7 @@ namespace RedditClone.Controllers
                 {
                     SubredditId = s.SubredditId,
                     SubredditName = s.SubredditName,
+                    OwnerId = s.OwnerId,
                     Posts = s.Posts
                 }).SingleOrDefault(s => s.SubredditId == id);
 
@@ -54,18 +56,18 @@ namespace RedditClone.Controllers
         [Authorize]
         public ActionResult AddSubreddit(SubredditViewModel subredditViewModel)
         {
-            
             using (var redditCloneContext = new RedditCloneContext())
             {
-                var subreddit = new Subreddit
+                var newSubreddit = new Subreddit
                 {
-                    SubredditName = subredditViewModel.SubredditName
+                    SubredditName = subredditViewModel.SubredditName,
+                    OwnerId = User.Identity.GetUserId()
                 };
 
-                redditCloneContext.Subreddits.Add(subreddit);
+                redditCloneContext.Subreddits.Add(newSubreddit);
                 redditCloneContext.SaveChanges();
 
-                return RedirectToAction("Detail", new { id = subreddit.SubredditId });
+                return RedirectToAction("Detail", new { id = newSubreddit.SubredditId });
             }
         }
 
@@ -73,20 +75,25 @@ namespace RedditClone.Controllers
         [Authorize]
         public ActionResult DeleteSubreddit(SubredditViewModel subredditViewModel)
         {
-            using (var redditCloneContext = new RedditCloneContext())
+            if (User.Identity.GetUserId() == subredditViewModel.OwnerId)
             {
-                var subreddit = redditCloneContext.Subreddits.SingleOrDefault(s => s.SubredditId == subredditViewModel.SubredditId);
-
-                if (subreddit != null)
+                using (var redditCloneContext = new RedditCloneContext())
                 {
-                    redditCloneContext.Subreddits.Remove(subreddit);
-                    redditCloneContext.SaveChanges();
+                    var subreddit = redditCloneContext.Subreddits.SingleOrDefault(s => s.SubredditId == subredditViewModel.SubredditId);
 
-                    return RedirectToAction("Index");
+                    if (subreddit != null)
+                    {
+                        redditCloneContext.Subreddits.Remove(subreddit);
+                        redditCloneContext.SaveChanges();
+
+                        return RedirectToAction("Index");
+                    }
+
+                    return new HttpNotFoundResult();
                 }
-
-                return new HttpNotFoundResult();
             }
+            
+            return new HttpUnauthorizedResult();
         }
     }
 }

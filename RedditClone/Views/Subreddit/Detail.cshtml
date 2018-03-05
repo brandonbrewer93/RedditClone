@@ -1,4 +1,5 @@
-﻿@using RedditClone
+﻿@using Microsoft.AspNet.Identity
+@using RedditClone
 @using RedditClone.Models
 @model RedditClone.Models.SubredditViewModel
 
@@ -20,28 +21,32 @@
         <hr class="my-4">
         <div class="btn-toolbar d-flex justify-content-between">
             @Html.ActionLink("Add Post", "PostAdd", "Post", new { id = Model.SubredditId }, new { @class = "btn btn-primary btn-sm" })
-            <button type="button" data-toggle="modal" data-target="#deleteSubredditModal" class="btn btn-danger btn-sm">Delete Subreddit</button>
-            <div class="modal fade" id="deleteSubredditModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        @using (Html.BeginForm("DeleteSubreddit", "Subreddit"))
-                        {
-                            <input type="hidden" value="@Model.SubredditId" name="SubredditId" />
-                            <div class="modal-header">
-                                <h4 class="modal-title">Delete Subreddit</h4>
-                                <button type="button" class="close ml-0" data-dismiss="modal" aria-label="Close">&times;</button>
-                            </div>
-                            <div class="modal-body">
-                                Are you sure you want to delete @Model.SubredditName?
-                            </div>
-                            <div class="modal-footer">
-                                <button type="submit" class="btn btn-danger btn-sm">Yes</button>
-                                <button type="button" class="btn btn-light btn-sm" data-dismiss="modal">Cancel</button>
-                            </div>
-                        }
+            
+            @if (User.Identity.GetUserId() == Model.OwnerId)
+            {
+                <button type="button" data-toggle="modal" data-target="#deleteSubredditModal" class="btn btn-danger btn-sm">Delete Subreddit</button>
+                <div class="modal fade" id="deleteSubredditModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            @using (Html.BeginForm("DeleteSubreddit", "Subreddit"))
+                            {
+                                <input type="hidden" value="@Model.SubredditId" name="SubredditId" />
+                                <div class="modal-header">
+                                    <h4 class="modal-title">Delete Subreddit</h4>
+                                    <button type="button" class="close ml-0" data-dismiss="modal" aria-label="Close">&times;</button>
+                                </div>
+                                <div class="modal-body">
+                                    Are you sure you want to delete @Model.SubredditName?
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="submit" class="btn btn-danger btn-sm">Yes</button>
+                                    <button type="button" class="btn btn-light btn-sm" data-dismiss="modal">Cancel</button>
+                                </div>
+                            }
+                        </div>
                     </div>
                 </div>
-            </div>
+            }
         </div>
     }
 </div>

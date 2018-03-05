@@ -17,12 +17,12 @@ namespace RedditClone.Migrations
         {
             context.Subreddits.AddOrUpdate(
                 s => s.SubredditId,
-                new Subreddit { SubredditId = 1, SubredditName = "Music" },
-                new Subreddit { SubredditId = 2, SubredditName = "Art" },
-                new Subreddit { SubredditId = 3, SubredditName = "Gaming" },
-                new Subreddit { SubredditId = 4, SubredditName = "News" },
-                new Subreddit { SubredditId = 5, SubredditName = "Science" },
-                new Subreddit { SubredditId = 6, SubredditName = "Funny" }
+                new Subreddit { SubredditId = 1, SubredditName = "Music", OwnerId = null},
+                new Subreddit { SubredditId = 2, SubredditName = "Art", OwnerId = null },
+                new Subreddit { SubredditId = 3, SubredditName = "Gaming", OwnerId = null },
+                new Subreddit { SubredditId = 4, SubredditName = "News", OwnerId = null },
+                new Subreddit { SubredditId = 5, SubredditName = "Science", OwnerId = null },
+                new Subreddit { SubredditId = 6, SubredditName = "Funny", OwnerId = null }
             );
 
             context.Comments.AddOrUpdate(

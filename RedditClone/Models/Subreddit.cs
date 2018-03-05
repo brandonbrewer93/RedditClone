@@ -15,6 +15,9 @@ namespace RedditClone.Models
         public int SubredditId { get; set; }
         public string SubredditName { get; set; }
 
+        public string OwnerId { get; set; }
+        public ApplicationUser Owner { get; set; }
+
         public ICollection<Post> Posts { get; set; }
     }
 }
