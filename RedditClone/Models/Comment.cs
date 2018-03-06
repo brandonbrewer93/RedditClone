@@ -16,6 +16,9 @@ namespace RedditClone.Models
         public string CommentBody { get; set; }
         public DateTime Date { get; set; }
 
+        public string OwnerId { get; set; }
+        public ApplicationUser Owner { get; set; }
+
         public int PostId { get; set; }
         public Post Post { get; set; }
 

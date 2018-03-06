@@ -18,6 +18,9 @@ namespace RedditClone.Models
         public string ImageLink { get; set; }
         public DateTime Date { get; set; }
 
+        public string OwnerId { get; set; }
+        public ApplicationUser Owner { get; set; }
+
         public int SubredditId { get; set; }
 
         public ICollection<Comment> Comments { get; set; }

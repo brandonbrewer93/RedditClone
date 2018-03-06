@@ -56,19 +56,24 @@ namespace RedditClone.Controllers
         [Authorize]
         public ActionResult AddSubreddit(SubredditViewModel subredditViewModel)
         {
-            using (var redditCloneContext = new RedditCloneContext())
+            if (User.Identity.IsAuthenticated)
             {
-                var newSubreddit = new Subreddit
+                using (var redditCloneContext = new RedditCloneContext())
                 {
-                    SubredditName = subredditViewModel.SubredditName,
-                    OwnerId = User.Identity.GetUserId()
-                };
+                    var newSubreddit = new Subreddit
+                    {
+                        SubredditName = subredditViewModel.SubredditName,
+                        OwnerId = User.Identity.GetUserId()
+                    };
 
-                redditCloneContext.Subreddits.Add(newSubreddit);
-                redditCloneContext.SaveChanges();
+                    redditCloneContext.Subreddits.Add(newSubreddit);
+                    redditCloneContext.SaveChanges();
 
-                return RedirectToAction("Detail", new { id = newSubreddit.SubredditId });
+                    return RedirectToAction("Detail", new { id = newSubreddit.SubredditId });
+                }
             }
+            
+            return new HttpUnauthorizedResult();
         }
 
         [HttpPost]

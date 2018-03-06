@@ -4,6 +4,7 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Web;
 using System.Web.Mvc;
+using Microsoft.AspNet.Identity;
 using RedditClone.Models;
 
 namespace RedditClone.Controllers
@@ -17,42 +18,53 @@ namespace RedditClone.Controllers
         {
             var postId = newComment.PostId;
 
-            using (var redditCloneContext = new RedditCloneContext())
+            if (User.Identity.IsAuthenticated)
             {
-                var comment = new Comment
+                using (var redditCloneContext = new RedditCloneContext())
                 {
-                    CommentBody = newComment.CommentBody,
-                    PostId = newComment.PostId,
-                    Date = DateTime.Now
-                };
+                    var comment = new Comment
+                    {
+                        CommentBody = newComment.CommentBody,
+                        PostId = newComment.PostId,
+                        OwnerId = User.Identity.GetUserId(),
+                        Date = DateTime.Now
+                    };
 
-                redditCloneContext.Comments.Add(comment);
-                redditCloneContext.SaveChanges();
+                    redditCloneContext.Comments.Add(comment);
+                    redditCloneContext.SaveChanges();
 
-                return RedirectToAction("Detail", "Post", new { id = postId });
+                    return RedirectToAction("Detail", "Post", new { id = postId });
+                }
             }
+            
+            return new HttpUnauthorizedResult();
         }
 
         [HttpPost]
         [Authorize]
         public ActionResult EditComment(Comment currentComment)
         {
-            using (var redditCloneContext = new RedditCloneContext())
+            if (User.Identity.GetUserId() == currentComment.OwnerId)
             {
-                var postId = currentComment.PostId;
-
-                var comment = redditCloneContext.Comments.SingleOrDefault(c => c.CommentId == currentComment.CommentId);
-
-                if (comment != null)
+                using (var redditCloneContext = new RedditCloneContext())
                 {
-                    comment.CommentBody = currentComment.CommentBody;
-                    redditCloneContext.SaveChanges();
+                    var postId = currentComment.PostId;
 
-                    return RedirectToAction("Detail", "Post", new { id = postId });
+                    var comment = redditCloneContext.Comments.SingleOrDefault(c => c.CommentId == currentComment.CommentId);
+
+                    if (comment != null)
+                    {
+                        comment.CommentBody = currentComment.CommentBody;
+                        redditCloneContext.SaveChanges();
+
+                        return RedirectToAction("Detail", "Post", new { id = postId });
+                    }
+
+                    return new HttpNotFoundResult();
                 }
             }
-
-            return new HttpNotFoundResult();
+            
+            return new HttpUnauthorizedResult();
         }
     }
 }
