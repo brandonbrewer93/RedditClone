@@ -9,8 +9,8 @@
     <h2>@Model.Title</h2>
     <span class="d-block text-right font-italic">@Model.Date</span>
     @if (Model.ImageLink != null)
-    {   //Inline-styling will be removed when custom CSS is added
-        <img src="@Model.ImageLink" alt="Post image." class="img-fluid rounded d-block w-100 mx-auto mt-5 mb-5" style="max-width: 800px" />
+    {
+        <img src="@Model.ImageLink" alt="Post image." class="img-fluid rounded d-block w-100 mx-auto mt-5 mb-5" id="post-img" />
     }
     <p class="mt-5">@Model.Body</p>
     @if (User.Identity.IsAuthenticated)

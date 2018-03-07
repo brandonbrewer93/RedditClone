@@ -3,12 +3,11 @@
     ViewBag.Title = "RedditClone";
 }
 
-<!--Inline-styling will be removed when custom CSS is added-->
-<div class="mx-auto" style="max-width: 500px">
+<div class="text-center mx-auto">
     <div>
         @{
             Html.RenderPartial("_LoginPartial");
         }
     </div>
-    @Html.ActionLink("View All Subreddits", "Index", "Subreddit", null, new {@class = "btn btn-primary btn-block btn-sm"})
+    @Html.ActionLink("View All Subreddits", "Index", "Subreddit", null, new {@class = "btn btn-primary btn-sm"})
 </div>
