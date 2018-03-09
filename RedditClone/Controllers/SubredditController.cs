@@ -39,8 +39,8 @@ namespace RedditClone.Controllers
                 {
                     SubredditId = s.SubredditId,
                     SubredditName = s.SubredditName,
-                    OwnerId = s.OwnerId,
-                    Posts = s.Posts
+                    Posts = s.Posts,
+                    OwnerId = s.OwnerId
                 }).SingleOrDefault(s => s.SubredditId == id);
 
                 if (subreddit == null)
@@ -56,49 +56,39 @@ namespace RedditClone.Controllers
         [Authorize]
         public ActionResult AddSubreddit(SubredditViewModel subredditViewModel)
         {
-            if (User.Identity.IsAuthenticated)
+            using (var redditCloneContext = new RedditCloneContext())
             {
-                using (var redditCloneContext = new RedditCloneContext())
+                var newSubreddit = new Subreddit
                 {
-                    var newSubreddit = new Subreddit
-                    {
-                        SubredditName = subredditViewModel.SubredditName,
-                        OwnerId = User.Identity.GetUserId()
-                    };
+                    SubredditName = subredditViewModel.SubredditName,
+                    OwnerId = User.Identity.GetUserId()
+                };
 
-                    redditCloneContext.Subreddits.Add(newSubreddit);
-                    redditCloneContext.SaveChanges();
+                redditCloneContext.Subreddits.Add(newSubreddit);
+                redditCloneContext.SaveChanges();
 
-                    return RedirectToAction("Detail", new { id = newSubreddit.SubredditId });
-                }
+                return RedirectToAction("Detail", new { id = newSubreddit.SubredditId });
             }
-            
-            return new HttpUnauthorizedResult();
         }
 
         [HttpPost]
         [Authorize]
         public ActionResult DeleteSubreddit(SubredditViewModel subredditViewModel)
         {
-            if (User.Identity.GetUserId() == subredditViewModel.OwnerId)
+            using (var redditCloneContext = new RedditCloneContext())
             {
-                using (var redditCloneContext = new RedditCloneContext())
+                var subreddit = redditCloneContext.Subreddits.SingleOrDefault(s => s.SubredditId == subredditViewModel.SubredditId);
+
+                if (subreddit != null && User.Identity.GetUserId() == subreddit.OwnerId)
                 {
-                    var subreddit = redditCloneContext.Subreddits.SingleOrDefault(s => s.SubredditId == subredditViewModel.SubredditId);
+                    redditCloneContext.Subreddits.Remove(subreddit);
+                    redditCloneContext.SaveChanges();
 
-                    if (subreddit != null)
-                    {
-                        redditCloneContext.Subreddits.Remove(subreddit);
-                        redditCloneContext.SaveChanges();
-
-                        return RedirectToAction("Index");
-                    }
-
-                    return new HttpNotFoundResult();
+                    return RedirectToAction("Index");
                 }
+
+                return new HttpNotFoundResult();
             }
-            
-            return new HttpUnauthorizedResult();
         }
     }
 }

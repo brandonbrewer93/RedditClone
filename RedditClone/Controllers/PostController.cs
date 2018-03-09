@@ -53,27 +53,23 @@ namespace RedditClone.Controllers
         [Authorize]
         public ActionResult AddPost(PostViewModel postViewModel)
         {
-            if (User.Identity.IsAuthenticated)
+            using (var redditCloneContext = new RedditCloneContext())
             {
-                using (var redditCloneContext = new RedditCloneContext())
+                var post = new Post
                 {
-                    var post = new Post
-                    {
-                        Title = postViewModel.Title,
-                        Body = postViewModel.Body,
-                        ImageLink = postViewModel.ImageLink,
-                        Date = DateTime.Now,
-                        OwnerId = User.Identity.GetUserId(),
-                        SubredditId = postViewModel.SubredditId
-                    };
+                    Title = postViewModel.Title,
+                    Body = postViewModel.Body,
+                    ImageLink = postViewModel.ImageLink,
+                    Date = DateTime.Now,
+                    OwnerId = User.Identity.GetUserId(),
+                    SubredditId = postViewModel.SubredditId
+                };
 
-                    redditCloneContext.Posts.Add(post);
-                    redditCloneContext.SaveChanges();
+                redditCloneContext.Posts.Add(post);
+                redditCloneContext.SaveChanges();
 
-                    return RedirectToAction("Detail", new { id = post.PostId });
-                }
+                return RedirectToAction("Detail", new { id = post.PostId });
             }
-            return new HttpUnauthorizedResult();
         }
 
         public ActionResult PostEdit(int id)
@@ -89,7 +85,6 @@ namespace RedditClone.Controllers
                         Title = post.Title,
                         ImageLink = post.ImageLink,
                         Body = post.Body,
-                        OwnerId = post.OwnerId,
                         SubredditId = post.SubredditId
                     };
 
@@ -104,27 +99,23 @@ namespace RedditClone.Controllers
         [Authorize]
         public ActionResult EditPost(PostViewModel postViewModel)
         {
-            if (User.Identity.IsAuthenticated && User.Identity.GetUserId() == postViewModel.OwnerId)
-            {
-                using (var redditCloneContext = new RedditCloneContext())
-                {
-                    var post = redditCloneContext.Posts.SingleOrDefault(p => p.PostId == postViewModel.PostId);
-
-                    if (post != null)
-                    {
-                        post.Title = postViewModel.Title;
-                        post.Body = postViewModel.Body;
-                        post.ImageLink = postViewModel.ImageLink;
-                        redditCloneContext.SaveChanges();
-
-                        return RedirectToAction("Detail", new { id = postViewModel.PostId });
-                    }
-
-                    return new HttpNotFoundResult();
-                }
-            }
             
-            return new HttpUnauthorizedResult();
+            using (var redditCloneContext = new RedditCloneContext())
+            {
+                var post = redditCloneContext.Posts.SingleOrDefault(p => p.PostId == postViewModel.PostId);
+                
+                if (post != null && User.Identity.GetUserId() == post.OwnerId)
+                {
+                    post.Title = postViewModel.Title;
+                    post.Body = postViewModel.Body;
+                    post.ImageLink = postViewModel.ImageLink;
+                    redditCloneContext.SaveChanges();
+
+                    return RedirectToAction("Detail", new { id = postViewModel.PostId });
+                }
+
+                return new HttpNotFoundResult();
+            }
         }
 
         [HttpPost]
@@ -132,26 +123,22 @@ namespace RedditClone.Controllers
         public ActionResult DeletePost(PostViewModel postViewModel)
         {
             int subredditId = postViewModel.SubredditId;
-
-            if (User.Identity.IsAuthenticated && User.Identity.GetUserId() == postViewModel.OwnerId)
-            {
-                using (var redditCloneContext = new RedditCloneContext())
-                {
-                    var post = redditCloneContext.Posts.SingleOrDefault(p => p.PostId == postViewModel.PostId);
-
-                    if (post != null)
-                    {
-                        redditCloneContext.Posts.Remove(post);
-                        redditCloneContext.SaveChanges();
-
-                        return RedirectToAction("Detail", "Subreddit", new { id = subredditId });
-                    }
-
-                    return new HttpNotFoundResult();
-                }
-            }
             
-            return new HttpUnauthorizedResult();
+            using (var redditCloneContext = new RedditCloneContext())
+            {
+                var post = redditCloneContext.Posts.SingleOrDefault(p => p.PostId == postViewModel.PostId);
+
+                if (post != null && User.Identity.GetUserId() == post.OwnerId)
+                {
+                    redditCloneContext.Posts.Remove(post);
+                    redditCloneContext.SaveChanges();
+
+                    return RedirectToAction("Detail", "Subreddit", new { id = subredditId });
+                }
+
+                return new HttpNotFoundResult();
+            }
+           
         }
     }
 }

@@ -17,54 +17,44 @@ namespace RedditClone.Controllers
         public ActionResult AddComment(Comment newComment)
         {
             var postId = newComment.PostId;
-
-            if (User.Identity.IsAuthenticated)
-            {
-                using (var redditCloneContext = new RedditCloneContext())
-                {
-                    var comment = new Comment
-                    {
-                        CommentBody = newComment.CommentBody,
-                        PostId = newComment.PostId,
-                        OwnerId = User.Identity.GetUserId(),
-                        Date = DateTime.Now
-                    };
-
-                    redditCloneContext.Comments.Add(comment);
-                    redditCloneContext.SaveChanges();
-
-                    return RedirectToAction("Detail", "Post", new { id = postId });
-                }
-            }
             
-            return new HttpUnauthorizedResult();
+            using (var redditCloneContext = new RedditCloneContext())
+            {
+                var comment = new Comment
+                {
+                    CommentBody = newComment.CommentBody,
+                    PostId = newComment.PostId,
+                    OwnerId = User.Identity.GetUserId(),
+                    Date = DateTime.Now
+                };
+
+                redditCloneContext.Comments.Add(comment);
+                redditCloneContext.SaveChanges();
+
+                return RedirectToAction("Detail", "Post", new { id = postId });
+            }
         }
 
         [HttpPost]
         [Authorize]
         public ActionResult EditComment(Comment currentComment)
         {
-            if (User.Identity.GetUserId() == currentComment.OwnerId)
+            using (var redditCloneContext = new RedditCloneContext())
             {
-                using (var redditCloneContext = new RedditCloneContext())
+                var postId = currentComment.PostId;
+
+                var comment = redditCloneContext.Comments.SingleOrDefault(c => c.CommentId == currentComment.CommentId);
+
+                if (comment != null && User.Identity.GetUserId() == comment.OwnerId)
                 {
-                    var postId = currentComment.PostId;
+                    comment.CommentBody = currentComment.CommentBody;
+                    redditCloneContext.SaveChanges();
 
-                    var comment = redditCloneContext.Comments.SingleOrDefault(c => c.CommentId == currentComment.CommentId);
-
-                    if (comment != null)
-                    {
-                        comment.CommentBody = currentComment.CommentBody;
-                        redditCloneContext.SaveChanges();
-
-                        return RedirectToAction("Detail", "Post", new { id = postId });
-                    }
-
-                    return new HttpNotFoundResult();
+                    return RedirectToAction("Detail", "Post", new { id = postId });
                 }
+
+                return new HttpNotFoundResult();
             }
-            
-            return new HttpUnauthorizedResult();
         }
     }
 }

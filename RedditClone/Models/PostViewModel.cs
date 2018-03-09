@@ -19,7 +19,6 @@ namespace RedditClone.Models
         public DateTime Date { get; set; }
 
         public string OwnerId { get; set; }
-        public ApplicationUser Owner { get; set; }
 
         public int SubredditId { get; set; }
 
