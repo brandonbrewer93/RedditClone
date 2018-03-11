@@ -7,10 +7,11 @@
 
 <div class="jumbotron">
     <div class="d-flex justify-content-between">
-        <h4>@Model.OwnerUserName :</h4>
+        <h4 id="user-name">@Model.OwnerUserName :</h4>
         <span class="font-italic">@Model.Date</span>
     </div>
     <h2>@Model.Title</h2>
+    <hr/>
     @if (Model.ImageLink != null)
     {
         <img src="@Model.ImageLink" alt="Post image." class="img-fluid rounded d-block w-100 mx-auto mt-5 mb-5" id="post-img"/>
@@ -81,19 +82,20 @@
     }
 </div>
 
-<div class="list-group">
+<div id="comments" class="list-group">
     @foreach (var comment in Model.Comments)
     {
         <div class="list-group-item">
-            <h6>@comment.OwnerUserName :</h6>
-            <p class="d-inline-block mb-5">@comment.CommentBody</p>
             <div class="d-flex justify-content-between">
+                <h6 id="user-name">@comment.OwnerUserName :</h6>
                 <span class="font-italic">@comment.Date</span>
-                @if (User.Identity.IsAuthenticated && User.Identity.GetUserId() == comment.OwnerId)
-                {
-                    <button type="button" data-toggle="modal" data-target="#comment-@comment.CommentId" class="btn btn-secondary btn-sm text-left">Edit</button>
-                }
             </div>
+            <hr id="comment-hr"/>
+            <p class="d-inline-block mb-5">@comment.CommentBody</p>
+            @if (User.Identity.IsAuthenticated && User.Identity.GetUserId() == comment.OwnerId)
+            {
+                <button type="button" data-toggle="modal" data-target="#comment-@comment.CommentId" class="d-block btn btn-secondary btn-sm">Edit</button>
+            }
         </div>
         <div class="modal fade" id="comment-@comment.CommentId" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">

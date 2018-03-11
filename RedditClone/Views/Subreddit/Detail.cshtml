@@ -51,7 +51,7 @@
     }
 </div>
 
-<div class="list-group">
+<div id="posts" class="list-group">
     @foreach (var post in Model.Posts.OrderByDescending(p => p.Date))
     {
         int commentCount = 0;

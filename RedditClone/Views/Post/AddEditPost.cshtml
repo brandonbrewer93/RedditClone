@@ -6,7 +6,7 @@
 }
 
 <div class="container-fluid col-lg-8">
-    <h1>@(isEditMode ? "Edit Post" : "Add Post")</h1>
+    <h1 class="title">@(isEditMode ? "Edit Post" : "Add Post")</h1>
     @using (Html.BeginForm(isEditMode ? "EditPost" : "AddPost", "Post"))
     {
         @Html.HiddenFor(m => m.PostId)
