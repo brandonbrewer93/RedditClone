@@ -1,4 +1,5 @@
 ﻿@using System.Collections.ObjectModel
+@using Microsoft.AspNet.Identity
 @using RedditClone
 @using RedditClone.Models
 <!DOCTYPE html>
@@ -26,7 +27,7 @@
                          @Html.AntiForgeryToken()
                         <a href="javascript:document.getElementById('logoutForm').submit()" class="nav-item nav-link">Log out</a>
                     }
-                    @Html.ActionLink(User.Identity.Name, "Index", "Manage", null, new {@class = "nav-item nav-link"})
+                    @Html.ActionLink(User.Identity.GetUserName(), "Index", "Manage", null, new {@class = "nav-item nav-link"})
                 }
                 else
                 {
