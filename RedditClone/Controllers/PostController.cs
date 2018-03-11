@@ -26,6 +26,7 @@ namespace RedditClone.Controllers
                     Comments = p.Comments,
                     Date = p.Date,
                     OwnerId = p.OwnerId,
+                    OwnerUserName = p.OwnerUserName,
                     SubredditId = p.SubredditId
                 }).SingleOrDefault(p => p.PostId == id);
 
@@ -62,6 +63,7 @@ namespace RedditClone.Controllers
                     ImageLink = postViewModel.ImageLink,
                     Date = DateTime.Now,
                     OwnerId = User.Identity.GetUserId(),
+                    OwnerUserName = User.Identity.GetUserName(),
                     SubredditId = postViewModel.SubredditId
                 };
 

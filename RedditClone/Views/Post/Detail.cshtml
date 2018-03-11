@@ -6,11 +6,14 @@
 }
 
 <div class="jumbotron">
+    <div class="d-flex justify-content-between">
+        <h4>@Model.OwnerUserName :</h4>
+        <span class="font-italic">@Model.Date</span>
+    </div>
     <h2>@Model.Title</h2>
-    <span class="d-block text-right font-italic">@Model.Date</span>
     @if (Model.ImageLink != null)
     {
-        <img src="@Model.ImageLink" alt="Post image." class="img-fluid rounded d-block w-100 mx-auto mt-5 mb-5" id="post-img" />
+        <img src="@Model.ImageLink" alt="Post image." class="img-fluid rounded d-block w-100 mx-auto mt-5 mb-5" id="post-img"/>
     }
     <p class="mt-5">@Model.Body</p>
     @if (User.Identity.IsAuthenticated)
@@ -23,8 +26,8 @@
                         <div class="modal-content">
                             @using (Html.BeginForm("AddComment", "Comment"))
                             {
-                                <input id="CommentId" name="CommentId" type="hidden" />
-                                <input id="PostId" name="PostId" type="hidden" value="@Model.PostId" />
+                                <input id="CommentId" name="CommentId" type="hidden"/>
+                                <input id="PostId" name="PostId" type="hidden" value="@Model.PostId"/>
                                 <div class="modal-header">
                                     <h4 class="modal-title">New Comment</h4>
                                     <button type="button" class="close ml-0" data-dismiss="modal" aria-label="Close">&times;</button>
@@ -82,7 +85,8 @@
     @foreach (var comment in Model.Comments)
     {
         <div class="list-group-item">
-            <h6 class="d-inline-block mb-5">@comment.CommentBody</h6>
+            <h6>@comment.OwnerUserName :</h6>
+            <p class="d-inline-block mb-5">@comment.CommentBody</p>
             <div class="d-flex justify-content-between">
                 <span class="font-italic">@comment.Date</span>
                 @if (User.Identity.IsAuthenticated && User.Identity.GetUserId() == comment.OwnerId)
@@ -99,6 +103,7 @@
                         <input type="hidden" id="CommentId" name="CommentId" value="@comment.CommentId" />
                         <input type="hidden" id="PostId" name="PostId" value="@comment.PostId" />
                         <input type="hidden" id="OwnerId" name="OwnerId" value="@comment.OwnerId" />
+                        <input type="hidden" id="OwnerUserName" name="OwnerUserName" value="@comment.OwnerUserName"/>
                         <div class="modal-header">
                             <h4 class="modal-title">Edit Comment</h4>
                             <button type="button" class="close ml-0" data-dismiss="modal" aria-label="Close">&times;</button>

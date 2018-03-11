@@ -12,6 +12,7 @@
         @Html.HiddenFor(m => m.PostId)
         @Html.HiddenFor(m => m.SubredditId)
         @Html.HiddenFor(m => m.OwnerId)
+        @Html.HiddenFor(m => m.OwnerUserName)
         <div class="form-group">
             @Html.LabelFor(m => m.Title)
             @Html.TextBoxFor(m => m.Title, new { @class = "form-control" })

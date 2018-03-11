@@ -25,6 +25,7 @@ namespace RedditClone.Controllers
                     CommentBody = newComment.CommentBody,
                     PostId = newComment.PostId,
                     OwnerId = User.Identity.GetUserId(),
+                    OwnerUserName = User.Identity.GetUserName(),
                     Date = DateTime.Now
                 };
 

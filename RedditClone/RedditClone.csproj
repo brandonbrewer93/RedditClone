@@ -188,6 +188,10 @@
     <Compile Include="Migrations\201803052359102_AddOwnerToPostAndCommentEntities.Designer.cs">
       <DependentUpon>201803052359102_AddOwnerToPostAndCommentEntities.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201803111719420_AddUsernameToPostAndComment.cs" />
+    <Compile Include="Migrations\201803111719420_AddUsernameToPostAndComment.Designer.cs">
+      <DependentUpon>201803111719420_AddUsernameToPostAndComment.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Comment.cs" />
@@ -283,6 +287,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201803052359102_AddOwnerToPostAndCommentEntities.resx">
       <DependentUpon>201803052359102_AddOwnerToPostAndCommentEntities.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803111719420_AddUsernameToPostAndComment.resx">
+      <DependentUpon>201803111719420_AddUsernameToPostAndComment.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
