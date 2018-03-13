@@ -1,7 +1,6 @@
 ﻿/******************************
 General Rules
 ******************************/
-
 body {
     background-color: #494949;
 }
@@ -133,4 +132,12 @@ Register & Login Form
 #loginForm {
     max-width: 400px;
     margin: auto;
+}
+
+/******************************
+Footer
+******************************/
+
+#footer {
+    background-color: #3d3d3d;
 }
