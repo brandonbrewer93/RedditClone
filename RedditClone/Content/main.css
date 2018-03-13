@@ -126,11 +126,11 @@ Register & Login Form
 ******************************/
 
 #register-form {
-    max-width: 500px;
+    max-width: 400px;
     margin: auto;
 }
 
 #loginForm {
-    max-width: 500px;
+    max-width: 400px;
     margin: auto;
 }
