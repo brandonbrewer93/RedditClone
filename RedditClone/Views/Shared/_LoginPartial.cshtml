@@ -1,22 +1,13 @@
 ﻿@using Microsoft.AspNet.Identity
 @if (Request.IsAuthenticated)
 {
-    using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
-    {
-    @Html.AntiForgeryToken()
+        
+    @Html.ActionLink("Hello " + User.Identity.GetUserName() + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage", @class = "btn btn-block btn-primary btn-sm my-2" })
+    @Html.ActionLink("Subreddits", "Index", "Subreddit", null, new { @class = "btn btn-block btn-primary btn-sm my-2" })
 
-    <ul class="nav navbar-nav navbar-right">
-        <li>
-            @Html.ActionLink("Hello " + User.Identity.GetUserName() + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })
-        </li>
-        <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
-    </ul>
-    }
 }
 else
 {
-    <ul class="nav navbar-nav navbar-right">
-        <li>@Html.ActionLink("Register", "Register", "Account", null, new { @class = "btn btn-block btn-primary btn-sm my-2" })</li>
-        <li>@Html.ActionLink("Log in", "Login", "Account", null, new { @class = "btn btn-block btn-primary btn-sm my-2" })</li>
-    </ul>
+    @Html.ActionLink("Register", "Register", "Account", null, new { @class = "btn btn-block btn-primary btn-sm my-2" })
+    @Html.ActionLink("Log in", "Login", "Account", null, new { @class = "btn btn-block btn-primary btn-sm my-2" })
 }

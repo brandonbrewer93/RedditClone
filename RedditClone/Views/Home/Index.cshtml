@@ -3,11 +3,13 @@
     ViewBag.Title = "RedditClone";
 }
 
-<div class="col-lg-6 mx-auto justify-content-around">
-    <div>
-        @{
-            Html.RenderPartial("_LoginPartial");
-        }
+<div class="col-lg-6 mx-auto">
+    <div id="login-partial" class="d-flex flex-column justify-content-around">
+        <div>
+            <h1 class="title text-center mb-5 font-weight-light" >RedditClone</h1>
+            @{
+                Html.RenderPartial("_LoginPartial");
+            }
+        </div>
     </div>
-    @Html.ActionLink("View All Subreddits", "Index", "Subreddit", null, new {@class = "btn btn-block btn-primary btn-sm my-2"})
 </div>
