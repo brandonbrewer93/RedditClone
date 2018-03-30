@@ -1,5 +1,4 @@
-﻿@using RedditClone.Models
-@model RedditClone.Models.SubredditListViewModel
+﻿@model RedditClone.Models.SubredditListViewModel
 
 @{
     ViewBag.Title = "RedditClone - All";
@@ -13,12 +12,14 @@
             <hr class="my-4">
             <p>If we dont have a subreddit that interests you, create a new one!</p>
             <p class="lead">
+                @* Only show add subreddit button if user is logged in. *@
                 @if (User.Identity.IsAuthenticated)
                 {
                     <button type="button" data-toggle="modal" data-target="#addSubredditModal" class="btn btn-primary btn-sm">Add Subreddit</button>
                     <div class="modal fade" id="addSubredditModal" tabindex="-1" role="dialog" aria-labelledby="addModalLabel" aria-hidden="true">
                         <div class="modal-dialog" role="document">
                             <div class="modal-content">
+                                @* Add subreddit form. *@
                                 @using (Html.BeginForm("AddSubreddit", "Subreddit"))
                                 {
                                     <input id="SubredditId" name="SubredditId" type="hidden"/>
@@ -43,16 +44,17 @@
                 }
                 else
                 {
-                    @Html.ActionLink("Login", "Login", "Account", null, new { @class = "btn btn-primary btn-sm" })
+                    @Html.ActionLink("Login", "Login", "Account", null, new {@class = "btn btn-primary btn-sm"})
                 }
             </p>
         </div>
     </div>
 
     <div id="subreddit-nav" class="list-group">
+        @* Show all subreddits *@
         @for (var i = 0; i < Model.Subreddits.Count; i++)
         {
-            <a href="@Url.Action("Detail", new { id = Model.Subreddits[i].SubredditId })"
+            <a href="@Url.Action("Detail", new {id = Model.Subreddits[i].SubredditId})"
                class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
                 <h4>@Model.Subreddits[i].SubredditName</h4>
                 <span class="badge badge-primary d-flex flex-column justify-content-around">

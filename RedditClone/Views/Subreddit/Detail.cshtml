@@ -5,6 +5,7 @@
 
 @{
     ViewBag.Title = "RedditClone - " + Model.SubredditName;
+    // Build a list of comments to get a count of comments in each post.
     var comments = new List<Comment>();
     using (var redditCloneContext = new RedditCloneContext())
     {
@@ -16,21 +17,24 @@
     <h1>
         @Model.SubredditName
     </h1>
+    @* Only show add post button if user is logged in. *@
     @if (User.Identity.IsAuthenticated)
     {
         <hr class="my-4">
         <div class="btn-toolbar d-flex justify-content-between">
             @Html.ActionLink("Add Post", "PostAdd", "Post", new { id = Model.SubredditId }, new { @class = "btn btn-primary btn-sm" })
             
+            @* Show delete subreddit button if the users owns the subreddit. *@
             @if (User.Identity.GetUserId() == Model.OwnerId)
             {
                 <button type="button" data-toggle="modal" data-target="#deleteSubredditModal" class="btn btn-danger btn-sm">Delete Subreddit</button>
                 <div class="modal fade" id="deleteSubredditModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
+                            @* Delete subreddit form. *@
                             @using (Html.BeginForm("DeleteSubreddit", "Subreddit"))
                             {
-                                <input type="hidden" value="@Model.SubredditId" name="SubredditId" />
+                                <input type="hidden" value="@Model.SubredditId" name="SubredditId"/>
                                 <div class="modal-header">
                                     <h4 class="modal-title">Delete Subreddit</h4>
                                     <button type="button" class="close ml-0" data-dismiss="modal" aria-label="Close">&times;</button>
@@ -52,6 +56,7 @@
 </div>
 
 <div id="posts" class="list-group">
+    @* Show all posts in the subreddit. *@
     @foreach (var post in Model.Posts.OrderByDescending(p => p.Date))
     {
         int commentCount = 0;

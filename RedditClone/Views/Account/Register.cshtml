@@ -5,7 +5,7 @@
 
 <section id="register-form">
     <h2 class="title">@ViewBag.Title</h2>
-
+    @*Register form.*@
     @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
     {
         @Html.AntiForgeryToken()

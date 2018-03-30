@@ -6,6 +6,7 @@
 
 <section id="loginForm">
     <h2 class="title">Log In</h2>
+    @*Login form.*@
     @using (Html.BeginForm("Login", "Account", new {ReturnUrl = "/Subreddit/Index"}, FormMethod.Post, new {@class = "form-horizontal", role = "form"}))
     {
         @Html.AntiForgeryToken()
@@ -27,10 +28,6 @@
         </div>
         <button type="submit"class="btn btn-primary btn-block my-2">Login</button>
         @Html.ActionLink("Register as a new user", "Register")
-        @* Enable this once you have account confirmation enabled for password reset functionality
-            <p>
-                @Html.ActionLink("Forgot your password?", "ForgotPassword")
-            </p>*@
     }
 </section>
 

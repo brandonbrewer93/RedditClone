@@ -5,6 +5,8 @@
     ViewBag.Title = "RedditClone - " + Model.Title;
 }
 
+@* Post detail view. *@
+
 <div class="jumbotron">
     <div class="d-flex justify-content-between">
         <h4 id="user-name">@Model.OwnerUserName :</h4>
@@ -17,14 +19,17 @@
         <img src="@Model.ImageLink" alt="Post image." class="img-fluid rounded d-block w-100 mx-auto mt-5 mb-5" id="post-img"/>
     }
     <p class="mt-5">@Model.Body</p>
+    @* Only display comment button if user is logged in. *@
     @if (User.Identity.IsAuthenticated)
     {
         <div class="btn-toolbar d-flex justify-content-between" role="toolbar">
             <div class="btn-group" role="group">
                 <button type="button" data-toggle="modal" data-target="#addCommentModal" class="btn btn-primary btn-sm">Comment</button>
+                @* Add comment modal *@
                 <div class="modal fade" id="addCommentModal" tabindex="-1" role="dialog" aria-labelledby="addModalLabel" aria-hidden="true">
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
+                            @* Add comment form *@
                             @using (Html.BeginForm("AddComment", "Comment"))
                             {
                                 <input id="CommentId" name="CommentId" type="hidden"/>
@@ -49,13 +54,16 @@
                 </div>
             </div>
             <div class="btn-group" role="group">
+                @* Only display edit and delete buttons if the user owns the content *@
                 @if (User.Identity.GetUserId() == Model.OwnerId)
                 {
                     @Html.ActionLink("Edit", "PostEdit", new {id = Model.PostId}, new {@class = "btn btn-secondary btn-sm"})
                     <button type="button" data-toggle="modal" data-target="#deletePostModal" class="btn btn-danger btn-sm">Delete</button>
+                    // Delete post modal
                     <div class="modal fade" id="deletePostModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
                         <div class="modal-dialog" role="document">
                             <div class="modal-content">
+                                @* Delete post form *@
                                 @using (Html.BeginForm("DeletePost", "Post"))
                                 {
                                     <input type="hidden" value="@Model.PostId" name="PostId"/>
@@ -83,6 +91,7 @@
 </div>
 
 <div id="comments" class="list-group">
+    @* Display all comments attached to the post. *@
     @foreach (var comment in Model.Comments)
     {
         <div class="list-group-item">
@@ -92,19 +101,22 @@
             </div>
             <hr id="comment-hr"/>
             <p class="d-inline-block mb-5">@comment.CommentBody</p>
+            @* Only display edit comment button if user is logged in and owns the content. *@
             @if (User.Identity.IsAuthenticated && User.Identity.GetUserId() == comment.OwnerId)
             {
                 <button type="button" data-toggle="modal" data-target="#comment-@comment.CommentId" class="d-block btn btn-secondary btn-sm">Edit</button>
             }
         </div>
+        // Edit comment modal.
         <div class="modal fade" id="comment-@comment.CommentId" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
+                    @* Edit comment form *@
                     @using (Html.BeginForm("EditComment", "Comment"))
                     {
-                        <input type="hidden" id="CommentId" name="CommentId" value="@comment.CommentId" />
-                        <input type="hidden" id="PostId" name="PostId" value="@comment.PostId" />
-                        <input type="hidden" id="OwnerId" name="OwnerId" value="@comment.OwnerId" />
+                        <input type="hidden" id="CommentId" name="CommentId" value="@comment.CommentId"/>
+                        <input type="hidden" id="PostId" name="PostId" value="@comment.PostId"/>
+                        <input type="hidden" id="OwnerId" name="OwnerId" value="@comment.OwnerId"/>
                         <input type="hidden" id="OwnerUserName" name="OwnerUserName" value="@comment.OwnerUserName"/>
                         <div class="modal-header">
                             <h4 class="modal-title">Edit Comment</h4>

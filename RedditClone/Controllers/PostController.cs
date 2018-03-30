@@ -17,6 +17,7 @@ namespace RedditClone.Controllers
         {
             using (var redditCloneContext = new RedditCloneContext())
             {
+                // Retrieve the correct Post from the database and build a post view model with the data
                 var post = redditCloneContext.Posts.Select(p => new PostViewModel
                 {
                     PostId = p.PostId,
@@ -56,6 +57,7 @@ namespace RedditClone.Controllers
         {
             using (var redditCloneContext = new RedditCloneContext())
             {
+                // Build a new post
                 var post = new Post
                 {
                     Title = postViewModel.Title,
@@ -67,6 +69,7 @@ namespace RedditClone.Controllers
                     SubredditId = postViewModel.SubredditId
                 };
 
+                // Add the post to the database and save the changes.
                 redditCloneContext.Posts.Add(post);
                 redditCloneContext.SaveChanges();
 
@@ -78,9 +81,11 @@ namespace RedditClone.Controllers
         {
             using (var redditCloneContext = new RedditCloneContext())
             {
+                // Retrieve existing post from the database
                 var post = redditCloneContext.Posts.SingleOrDefault(p => p.PostId == id);
                 if (post != null)
                 {
+                    // Build a PostViewModel to populate the Edit form.
                     var postViewModel = new PostViewModel
                     {
                         PostId = post.PostId,
@@ -104,8 +109,10 @@ namespace RedditClone.Controllers
             
             using (var redditCloneContext = new RedditCloneContext())
             {
+                // Retrieve the correct post from the database.
                 var post = redditCloneContext.Posts.SingleOrDefault(p => p.PostId == postViewModel.PostId);
                 
+                // Ensure that the user owns the post, make the appropriate changes and save the DB.
                 if (post != null && User.Identity.GetUserId() == post.OwnerId)
                 {
                     post.Title = postViewModel.Title;
@@ -130,6 +137,7 @@ namespace RedditClone.Controllers
             {
                 var post = redditCloneContext.Posts.SingleOrDefault(p => p.PostId == postViewModel.PostId);
 
+                //Ensure that the user owns the post, and delete post from the DB.
                 if (post != null && User.Identity.GetUserId() == post.OwnerId)
                 {
                     redditCloneContext.Posts.Remove(post);

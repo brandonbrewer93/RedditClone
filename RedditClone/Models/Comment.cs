@@ -5,13 +5,10 @@ using System.Web;
 
 namespace RedditClone.Models
 {
+
+    // Comment data model.
     public class Comment
     {
-        public Comment()
-        {
-            Comments = new List<Comment>();
-        }
-
         public int CommentId { get; set; }
         public string CommentBody { get; set; }
         public DateTime Date { get; set; }
@@ -21,7 +18,5 @@ namespace RedditClone.Models
 
         public int PostId { get; set; }
         public Post Post { get; set; }
-
-        public ICollection<Comment> Comments;
     }
 }

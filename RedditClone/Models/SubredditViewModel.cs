@@ -5,6 +5,7 @@ using System.Web;
 
 namespace RedditClone.Models
 {
+    // Subreddit view model. Contains necessary data for views.
     public class SubredditViewModel
     {
         public SubredditViewModel()

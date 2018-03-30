@@ -7,6 +7,7 @@ namespace RedditClone.Models
 {
     public class PostViewModel
     {
+        // Post view model. Contains necessary data views.
         public PostViewModel()
         {
             Comments = new List<Comment>();

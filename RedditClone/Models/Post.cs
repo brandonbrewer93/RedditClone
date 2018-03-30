@@ -7,6 +7,7 @@ namespace RedditClone.Models
 {
     public class Post
     {
+        // Post data model.
         public Post()
         {
             Comments = new List<Comment>();

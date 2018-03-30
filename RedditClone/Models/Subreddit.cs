@@ -7,6 +7,7 @@ namespace RedditClone.Models
 {
     public class Subreddit
     {
+        //Subreddit data model.
         public Subreddit()
         {
             Posts = new List<Post>();

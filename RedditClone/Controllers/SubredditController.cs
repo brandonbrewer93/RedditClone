@@ -18,6 +18,7 @@ namespace RedditClone.Controllers
         {
             using (var subredditContext = new RedditCloneContext())
             {
+                // Build a list of the subreddits currently in the database.
                 var subredditList = new SubredditListViewModel
                 {
                     Subreddits = subredditContext.Subreddits.Select(s => new SubredditViewModel
@@ -35,6 +36,7 @@ namespace RedditClone.Controllers
         {
             using (var redditCloneContext = new RedditCloneContext())
             {
+                // Query the DB for the subreddit with the given Id and build a view model.
                 var subreddit = redditCloneContext.Subreddits.Select(s => new SubredditViewModel
                 {
                     SubredditId = s.SubredditId,
@@ -58,6 +60,7 @@ namespace RedditClone.Controllers
         {
             using (var redditCloneContext = new RedditCloneContext())
             {
+                // Build a new subreddit and save it to the DB.
                 var newSubreddit = new Subreddit
                 {
                     SubredditName = subredditViewModel.SubredditName,
@@ -79,6 +82,7 @@ namespace RedditClone.Controllers
             {
                 var subreddit = redditCloneContext.Subreddits.SingleOrDefault(s => s.SubredditId == subredditViewModel.SubredditId);
 
+                // Ensure that the user owns the subreddit and delet it from the DB.
                 if (subreddit != null && User.Identity.GetUserId() == subreddit.OwnerId)
                 {
                     redditCloneContext.Subreddits.Remove(subreddit);
